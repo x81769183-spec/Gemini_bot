@@ -9,48 +9,44 @@ from telegram.ext import (
 )
 import google.generativeai as genai
 
-# Token va API kalitlaringizni kiriting
-TELEGRAM_TOKEN = "BOT_TOKENINGIZ"
-GEMINI_API_KEY = "GEMINI_API_KALITINGIZ"
+# Token va API kalitlarini kiritish
+TELEGRAM_TOKEN = "8710296743:AAFtyE4fR9aCwv9lA2r9H4Aq6eVXFHtWM0"
+GEMINI_API_KEY = "GEMINI_API_KALITINGIZNI_SHU_YERGA_YOZING"
 
-# Gemini sozlash
+# Gemini AI sozlash
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Logging
+# Logging (xatoliklarni kuzatib borish uchun)
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
 
-# /start komandasi
+# /start komandasi uchun funksiya
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Salom! Men Gemini AI botiman. Menga savol yuboring."
+        "Salom! Men Gemini AI asosida ishlaydigan botman. Menga istalgan savolni yozib yuboring!"
     )
 
-# Xabarlarni qayta ishlash
+# Foydalanuvchi xabarlarini qabul qilib, Gemini'ga yuborish uchun funksiya
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_text = update.message.text
-
+    user_message = update.message.text
+    
     try:
-        response = model.generate_content(user_text)
+        # Gemini'dan javob olish
+        response = model.generate_content(user_message)
         await update.message.reply_text(response.text)
-
     except Exception as e:
-        logging.error(f"Xatolik: {e}")
-        await update.message.reply_text(
-            f"Xatolik yuz berdi:\n{e}"
-        )
+        await update.message.reply_text("Kechirasiz, javob olishda xatolik yuz berdi.")
 
-# Asosiy qism
+# Asosiy ishga tushirish qismi
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
+    # Komandalar va xabarlarni ulash
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(
-        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
-    )
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     print("Bot ishga tushdi...")
     app.run_polling()
