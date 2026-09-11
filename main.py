@@ -1,5 +1,8 @@
 
-import logging from telegram import Update from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters import google.generativeai as genai
+import logging
+from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+
 TELEGRAM_TOKEN = "8710296743:AAFtyE4f7R9aCwv9lA2r9H4Aq6eVXfHtwM0" GEMINI_API_KEY = "AQ.Ab8RN6JYsUYLJ0v4YpZAwLROgnTDE6DVSMo64Iyif_g2gz_jng"
 genai.configure(api_key=GEMINI_API_KEY) model = genai.GenerativeModel("gemini-1.5-flash")
 logging.basicConfig( format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO )
